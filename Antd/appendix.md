@@ -1,6 +1,6 @@
 # 需要了解的 ES6 语法
 
-## [阮一峰](http://es6.ruanyifeng.com/#docs/intro#Babel-%E8%BD%AC%E7%A0%81%E5%99%A8)
+## [详细请看阮一峰老师的教程](http://es6.ruanyifeng.com/)
 
 ### let 和 const
 
