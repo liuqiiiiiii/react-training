@@ -1,22 +1,25 @@
 import React from 'react';
-import React.dom from 'react-dom';
-
+import ReactDOM from 'react-dom';
 import './index.css';
 
 class Square extends React.Component {
   render() {
     return (
-      <button className="square"></button>
-    )
+      <button className="square">
+        {this.props.value}
+      </button>
+    );
   }
 }
 
 class Board extends React.Component {
   renderSquare(i) {
-    return <Square />
+    return <Square  value={i}/>
   }
+
   render() {
-    const status = '下个玩家：刘琦';
+    const status = 'Next Player : X';
+
     return (
       <div>
         <div className="status">{status}</div>
@@ -49,7 +52,7 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{/* status */}</div>
-          <div>{/* TODO */}</div>
+          <ul>{/* TODO */}</ul>
         </div>
       </div>
     );
