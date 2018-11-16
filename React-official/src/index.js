@@ -10,6 +10,26 @@ function Square(props) {
   );
 }
 
+function calculateWinner(liuqi) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (liuqi[a] && liuqi[a] === liuqi[b] && liuqi[a] === liuqi[c]) {
+      return liuqi[a];
+    }
+  }
+  return null;
+}
+
 class Board extends React.Component {
   constructor() {
     super();
@@ -70,26 +90,6 @@ class Board extends React.Component {
       </div>
     );
   }
-}
-
-function calculateWinner(liuqi) {
-  const lines = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-  ];
-  for (let i = 0; i < lines.length; i++) {
-    const [a, b, c] = lines[i];
-    if (liuqi[a] && liuqi[a] === liuqi[b] && liuqi[a] === liuqi[c]) {
-      return liuqi[a];
-    }
-  }
-  return null;
 }
 
 class Game extends React.Component {
