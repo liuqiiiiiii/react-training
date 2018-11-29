@@ -1,77 +1,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 
-function Square(props) {
-  return (
-    <button className="square" onClick={props.onClick}>
-      {props.value}
-    </button>
-  );
-}
+import './index.less';
 
-function calculateWinner(liuqi) {
-  const lines = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-  ];
-  for (let i = 0; i < lines.length; i++) {
-    const [a, b, c] = lines[i];
-    if (liuqi[a] && liuqi[a] === liuqi[b] && liuqi[a] === liuqi[c]) {
-      return liuqi[a];
-    }
+class Square extends React.Component {
+  render() {
+    return (
+      <button className="square">
+        {/* TODO */}
+      </button>
+    );
   }
-  return null;
 }
 
 class Board extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      squares: Array(9).fill(null),
-      xIsNext: true,
-    }
-  }
-
   renderSquare(i) {
-    return(
-      <Square
-        value={this.state.squares[i]}
-        onClick={() => this.handleClick(i)}
-      />
-    )
-  }
-
-  handleClick(i) {
-    const squaress = this.state.squares.slice();
-    if(calculateWinner(squaress) || squaress[i]) {
-      return;
-    }
-    squaress[i] = this.state.xIsNext ? 'x' : 'o';
-    this.setState({
-      squares: squaress,
-      xIsNext: !this.state.xIsNext,
-    })
+    return <Square />;
   }
   render() {
-    const winner = calculateWinner(this.state.squares);
-    let status;
-    if(winner) {
-      status = '赢家：' + winner;
-    } else {
-      status = '下一位落子者：' + (this.state.xIsNext ? 'x' : 'o')
-    }
-
+    const status = '下一个玩家：X';
     return (
       <div>
         <div className="status">{status}</div>
-
         <div className="board-row">
           {this.renderSquare(0)}
           {this.renderSquare(1)}
@@ -101,7 +51,7 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{/* status */}</div>
-          <ul>{/* TODO */}</ul>
+          <ol>{/* TODO */}</ol>
         </div>
       </div>
     );
@@ -112,3 +62,23 @@ ReactDOM.render(
   <Game />,
   document.getElementById('root')
 );
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [1, 4, 8],
+    [2, 4, 6],
+  ];
+  for(let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if(squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
