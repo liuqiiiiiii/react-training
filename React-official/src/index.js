@@ -4,11 +4,28 @@ import ReactDOM from 'react-dom';
 import './index.less';
 
 class Square extends React.Component {
+  // React 组件可以通过在构造函数中设置 this.state 来拥有 state(状态) ，构造函数应该被认为是组件的私有。
+  // 让我们在 Square(方格) 组件的 state(状态) 中存储当前值，并在单击方格时更改它。
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: this.props.value,
+    }
+  }
+
   render() {
     return (
-      <button className="square">
-        {this.props.value}
+      // 注意如何使用 onClick={() => alert('click')}，将传递“一个函数”作为 onClick prop（属性）。
+      // 它只在点击后触发。忘记 () => 并直接编写 onClick={alert('click')} 是一个常见错误，并且每次组件重新渲染时都会触发 alert。
+      <button
+        className="square"
+        onClick={() => this.setState({ value: 'x' })}
+      >
+        {this.state.value}
       </button>
+      // 通过 Square(方格) 的 render 方法中的 onClick 处理程序调用 this.setState，只要单击 <button> ，我就告诉 React 重新渲染 Square(方格) 。
+      // 更新后，Square(方格) 的 this.state.value 的值将是 'X' ，所以会在游戏棋盘上看到 X。
+      // 如果你点击任何 Square(方格)，就会出现一个 X。当你在一个组件中调用 setState 时，React 也会自动更新其子组件。
     );
   }
 }
