@@ -9,7 +9,7 @@ function Square(props) {
       // 它只在点击后触发。忘记 () => 并直接编写 onClick={alert('click')} 是一个常见错误，并且每次组件重新渲染时都会触发 alert。
       <button
         className="square"
-        onClick={() => props.onClick()}
+        onClick={props.onClick}// 当我将 Square 修改为一个函数式组件时，还将 onClick={() => this.props.onClick()} 更改为更短的 onClick = {props.onClick}（注意两边都去掉了括号）。在类中，我使用箭头函数来访问正确的 this 值，但在函数式组件中不需要担心 this。
       >
         {props.value}
       </button>
