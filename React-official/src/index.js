@@ -10,7 +10,7 @@ class Square extends React.Component {
       // 它只在点击后触发。忘记 () => 并直接编写 onClick={alert('click')} 是一个常见错误，并且每次组件重新渲染时都会触发 alert。
       <button
         className="square"
-        onClick={() => this.props.onclick()}
+        onClick={() => this.props.onClick()}
       >
         {this.props.value}
       </button>
