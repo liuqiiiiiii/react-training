@@ -23,14 +23,18 @@ class Board extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      squares: Array(9).fill(null)
+      squares: Array(9).fill(null),
+      xIsNext: true,
     }
   }
 
   handleClick(i) {
     const squares = this.state.squares.slice();
-    squares[i] = 'x';
-    this.setState({ squares: squares });
+    squares[i] = this.state.xIsNext ? 'x' : 'o';
+    this.setState({
+      squares: squares,
+      xIsNext: !this.state.xIsNext,
+    });
   }
 
   renderSquare(i) {
@@ -42,7 +46,7 @@ class Board extends React.Component {
     );
   }
   render() {
-    const status = '下一个玩家：X';
+    const status = '请 ' + (this.state.xIsNext ? 'x': 'o') + ' 落子';
     return (
       <div>
         <div className="status">{status}</div>
