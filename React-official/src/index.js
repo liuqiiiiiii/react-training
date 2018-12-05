@@ -9,7 +9,7 @@ function Square(props) {
       // 它只在点击后触发。忘记 () => 并直接编写 onClick={alert('click')} 是一个常见错误，并且每次组件重新渲染时都会触发 alert。
       <button
         className="square"
-        onClick={props.onClick}// 当我将 Square 修改为一个函数式组件时，还将 onClick={() => this.props.onClick()} 更改为更短的 onClick = {props.onClick}（注意两边都去掉了括号）。在类中，我使用箭头函数来访问正确的 this 值，但在函数式组件中不需要担心 this。
+        onClick={props.onClick}// 当我将 Square 修改为一个函数式组件时，同样将 onClick={() => this.props.onClick()} 更改为更短的 onClick = {props.onClick}（注意两边都去掉了括号）。在类中，我使用箭头函数来访问正确的 this 值，但在函数式组件中不需要担心 this。
       >
         {props.value}
       </button>
@@ -20,36 +20,9 @@ function Square(props) {
 }
 
 class Board extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      squares: Array(9).fill(null),
-      xIsNext: true,
-    }
-  }
-
-  handleClick(i) {
-    const squares = this.state.squares.slice();
-    squares[i] = this.state.xIsNext ? 'x' : 'o';
-    this.setState({
-      squares: squares,
-      xIsNext: !this.state.xIsNext,
-    });
-  }
-
-  renderSquare(i) {
-    return(
-      <Square
-        value={this.state.squares[i]}
-        onClick={() => this.handleClick(i)}
-      />
-    );
-  }
   render() {
-    const status = '请 ' + (this.state.xIsNext ? 'x': 'o') + ' 落子';
     return (
       <div>
-        <div className="status">{status}</div>
         <div className="board-row">
           {this.renderSquare(0)}{this.renderSquare(1)}{this.renderSquare(2)}
         </div>
@@ -65,14 +38,54 @@ class Board extends React.Component {
 }
 
 class Game extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      history: [{
+        squares: Array(9).full(null),
+      }],
+      xIsNext: true
+    };
+  }
+
+  handleClick(i) {
+    const history = this.state.history;
+    const current = history[history.length - 1];
+    const squares = current.squares.slice();
+    if(calculateWinner(this.state.squares || squares[i])) {
+      return;
+    }
+    squares[i] = this.state.xIsNext ? 'x' : 'o';
+    this.setState({
+      history: history.concat([{// 与数组 push() 方法不同，concat() 方法不会改变原始数组，所以我更喜欢它。
+        squares: squares,
+      }]),
+      xIsNext: !this.state.xIsNext,
+    })
+  }
+
   render() {
+    const history = this.state.history;
+    const current = history[history.length - 1];
+    const winner = calculateWinner(current.squares);
+
+    let status;
+    if(winner) {
+      status = 'winner' + winner;
+    } else {
+      status = 'next player' + (this.state.xIsNext ? 'x' : 'o');
+    }
+
     return (
       <div className="game">
         <div className="game-board">
-          <Board />
+          <Board
+            squares={current.squares}
+            onClick={(i) => this.handleClick(i)}
+          />
         </div>
         <div className="game-info">
-          <div>{/* status */}</div>
+          <div>{status}</div>
           <ol>{/* TODO */}</ol>
         </div>
       </div>
@@ -85,22 +98,22 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-// function calculateWinner(squares) {
-//   const lines = [
-//     [0, 1, 2],
-//     [3, 4, 5],
-//     [6, 7, 8],
-//     [0, 3, 6],
-//     [1, 4, 7],
-//     [2, 5, 8],
-//     [1, 4, 8],
-//     [2, 4, 6],
-//   ];
-//   for(let i = 0; i < lines.length; i++) {
-//     const [a, b, c] = lines[i];
-//     if(squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-//       return squares[a];
-//     }
-//   }
-//   return null;
-// }
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [1, 4, 8],
+    [2, 4, 6],
+  ];
+  for(let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if(squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
